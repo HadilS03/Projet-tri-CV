@@ -1,0 +1,17 @@
+# UI
+streamlit==1.26.0
+
+# Traitement données
+pandas==2.0.3
+numpy==1.25.0
+
+# Traitement fichiers CV
+python-docx==0.8.11
+PyMuPDF==1.22.5
+
+# NLP / Similarité
+sentence-transformers==2.2.2
+
+
+# Autres utilitaires
+scikit-learn==1.3.1

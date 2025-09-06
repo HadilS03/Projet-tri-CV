@@ -20,7 +20,9 @@ def extract_text_from_docx(file_path: str) -> str:
     doc = Document(file_path)
     return "\n".join([p.text for p in doc.paragraphs])
 
-def process_cv(file_path: str, job_description: str) -> dict:
+def process_cv(file_path: str, job_description: str, user_id=None, option1=None, option2=None) -> dict:
+    ...
+
     """
     Traite un CV et renvoie les scores :
     - Similarité sémantique

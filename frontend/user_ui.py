@@ -31,7 +31,7 @@ def generate_report(docx_file, user, results, weights, retention_days, job_descr
     hdr_cells[1].text = 'Score (%)'
     hdr_cells[2].text = 'Similarité (%)'
     hdr_cells[3].text = 'Mots-clés (%)'
-    hdr_cells[4].text = 'Expérience (ans)'
+    hdr_cells[4].text = 'Expérience (%)'
 
     for r in results:
         row_cells = table.add_row().cells
@@ -39,7 +39,7 @@ def generate_report(docx_file, user, results, weights, retention_days, job_descr
         row_cells[1].text = str(r['Score (%)'])
         row_cells[2].text = str(r['Similarité (%)'])
         row_cells[3].text = str(r['Mots-clés (%)'])
-        row_cells[4].text = str(r['Expérience (ans)'])
+        row_cells[4].text = str(r['Expérience (%)'])
 
     doc.save(docx_file)
 
@@ -112,7 +112,7 @@ def user_app_ui():
                         "Score (%)": safe_float(res.get("score", 0)),
                         "Similarité (%)": safe_float(res.get("similarity", 0)),
                         "Mots-clés (%)": safe_float(res.get("keywords", 0)),
-                        "Expérience (ans)": safe_float(res.get("experience", 0))
+                        "Expérience (%)": safe_float(res.get("experience", 0))
                     })
                     add_file(uf.name, retention_days)
                 except Exception as e:

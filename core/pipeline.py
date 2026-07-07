@@ -6,8 +6,11 @@ import fitz  # type: ignore # PyMuPDF
 from docx import Document  # type: ignore
 from sentence_transformers import SentenceTransformer, util  # type: ignore
 
-# Modèle SentenceTransformer pour le calcul de similarité sémantique.
-model = SentenceTransformer('all-MiniLM-L6-v2')
+# Modèle d'embeddings retenu : multilingue, car les CV traités sont en français ;
+# l'anglo-centré all-MiniLM-L6-v2 sous-performe hors anglais. Surchargeable via la
+# variable d'environnement CV_MODEL (ex. pour tester un autre modèle).
+NOM_MODELE = os.environ.get("CV_MODEL", "paraphrase-multilingual-MiniLM-L12-v2")
+model = SentenceTransformer(NOM_MODELE)
 
 # Petite liste de mots vides français, ignorés lors de l'extraction de mots-clés.
 MOTS_VIDES = {

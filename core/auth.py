@@ -1,6 +1,6 @@
 import streamlit as st  # type: ignore
 import sqlite3
-import hashlib
+import bcrypt
 import os
 import time
 
@@ -69,7 +69,18 @@ def cleanup_expired_files(expiration_seconds: int = 86400):
 #   AUTHENTIFICATION
 # =========================
 def hash_password(password):
-    return hashlib.sha256(password.encode()).hexdigest()
+    # bcrypt : fonction de hachage lente avec sel intégré, résistante au force
+    # brute et aux tables arc-en-ciel, contrairement à un simple SHA-256.
+    return bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
+
+
+def verify_password(password, hashed):
+    """Vérifie un mot de passe en clair face au hash bcrypt stocké.
+
+    Le sel étant inclus dans le hash, la comparaison se fait via bcrypt.checkpw
+    (et jamais par égalité SQL, car deux hachages du même mot de passe diffèrent).
+    """
+    return bcrypt.checkpw(password.encode(), hashed.encode())
 
 def signup(username, email, password):
     conn = sqlite3.connect(DB_PATH)
@@ -87,11 +98,15 @@ def signup(username, email, password):
 def login(username, password):
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM users WHERE username = ? AND password = ?", 
-                   (username, hash_password(password)))
+    # On récupère l'utilisateur par son nom seul, puis on vérifie le mot de passe
+    # en Python : un hash bcrypt est salé, il ne peut donc pas être comparé en SQL.
+    cursor.execute("SELECT * FROM users WHERE username = ?", (username,))
     user = cursor.fetchone()
     conn.close()
-    return user
+    # Colonnes : (id, username, email, password) -> le hash est en position 3.
+    if user and verify_password(password, user[3]):
+        return user
+    return None
 
 def authenticate(username, password):
     """Alias pour login(), utile dans login_ui."""

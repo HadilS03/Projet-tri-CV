@@ -13,6 +13,9 @@ FILES_DB_PATH = os.path.join(os.path.dirname(__file__), "../db/files.db")
 # =========================
 def ensure_tables():
     """Créer la table users si elle n'existe pas."""
+    # Le dossier db/ n'est pas versionné (données personnelles) : on le recrée
+    # au démarrage si besoin, sinon sqlite3.connect échouerait.
+    os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     cursor.execute("""
@@ -28,6 +31,8 @@ def ensure_tables():
 
 def init_files_db():
     """Créer la table des fichiers si elle n'existe pas."""
+    # Recrée le dossier db/ (non versionné) au démarrage si besoin.
+    os.makedirs(os.path.dirname(FILES_DB_PATH), exist_ok=True)
     conn = sqlite3.connect(FILES_DB_PATH)
     cursor = conn.cursor()
     cursor.execute("""

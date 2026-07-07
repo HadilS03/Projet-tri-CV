@@ -1,1 +1,8 @@
-"db/users.db" 
+__pycache__/
+*.pyc
+db/
+uploads/
+temp_*
+*.docx
+*.pdf
+.env

@@ -10,7 +10,7 @@ def safe_float(val):
         val = val.get("value", 0)
     try:
         return float(val)
-    except:
+    except (TypeError, ValueError):
         return 0
 
 def generate_report(docx_file, user, results, weights, retention_days, job_description_text):

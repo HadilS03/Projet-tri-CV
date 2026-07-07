@@ -4,7 +4,7 @@ def safe_float(val):
         val = val.get("value", 0)
     try:
         return float(val)
-    except:
+    except (TypeError, ValueError):
         return 0
 
 def normalize_weights(sim: float, keywords: float, exp: float) -> tuple[float,float,float]:

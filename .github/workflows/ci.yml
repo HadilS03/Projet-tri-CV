@@ -1,0 +1,31 @@
+name: CI
+
+# Se déclenche à chaque push et à chaque pull request.
+on:
+  push:
+  pull_request:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
+
+      - name: Installer Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Installer les dépendances
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt -r requirements-dev.txt
+
+      - name: Lint (ruff)
+        run: ruff check .
+
+      - name: Tests (pytest)
+        # Aucun téléchargement de modèle : le chargement est paresseux et mocké
+        # dans les tests (voir get_model / monkeypatch).
+        run: pytest -q

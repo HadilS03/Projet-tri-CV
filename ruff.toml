@@ -1,0 +1,3 @@
+# Configuration ruff minimale : règles par défaut (erreurs réelles + style
+# essentiel, dont imports inutilisés et except nu) et longueur de ligne raisonnable.
+line-length = 100

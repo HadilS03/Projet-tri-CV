@@ -1,2 +1,3 @@
-# Dépendances de développement et de CI (tests).
+# Dépendances de développement et de CI (tests + lint).
 pytest==8.4.1
+ruff==0.15.20

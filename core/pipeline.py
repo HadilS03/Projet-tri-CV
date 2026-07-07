@@ -10,7 +10,20 @@ from sentence_transformers import SentenceTransformer, util  # type: ignore
 # l'anglo-centré all-MiniLM-L6-v2 sous-performe hors anglais. Surchargeable via la
 # variable d'environnement CV_MODEL (ex. pour tester un autre modèle).
 NOM_MODELE = os.environ.get("CV_MODEL", "paraphrase-multilingual-MiniLM-L12-v2")
-model = SentenceTransformer(NOM_MODELE)
+
+_model = None
+
+
+def get_model():
+    """Charge le modèle d'embeddings à la demande, puis le met en cache.
+
+    Le chargement paresseux évite tout téléchargement à l'import du module :
+    indispensable pour que les tests et la CI s'exécutent sans accès réseau.
+    """
+    global _model
+    if _model is None:
+        _model = SentenceTransformer(NOM_MODELE)
+    return _model
 
 # Petite liste de mots vides français, ignorés lors de l'extraction de mots-clés.
 MOTS_VIDES = {
@@ -112,8 +125,9 @@ def process_cv(
 
     # Similarité sémantique, bornée à [0, 100] (la similarité cosinus peut être
     # théoriquement négative).
-    embedding_cv = model.encode(text, convert_to_tensor=True)
-    embedding_job = model.encode(job_description, convert_to_tensor=True)
+    modele = get_model()
+    embedding_cv = modele.encode(text, convert_to_tensor=True)
+    embedding_job = modele.encode(job_description, convert_to_tensor=True)
     similarity = util.pytorch_cos_sim(embedding_cv, embedding_job).item() * 100
     similarity = max(0.0, min(100.0, similarity))
 

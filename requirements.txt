@@ -1,19 +1,19 @@
 # UI
-streamlit==1.26.0
+streamlit==1.49.1
 
 # Traitement données
-pandas==2.0.3
-numpy==1.25.0
+pandas==2.3.2
+numpy==2.3.2
 
 # Traitement fichiers CV
-python-docx==0.8.11
-PyMuPDF==1.22.5
+python-docx==1.2.0
+PyMuPDF==1.26.4
 
 # NLP / Similarité
-sentence-transformers==2.2.2
+sentence-transformers==5.1.0
 
 # Sécurité (hachage des mots de passe)
 bcrypt==4.1.2
 
 # Autres utilitaires
-scikit-learn==1.3.1
+scikit-learn==1.8.0
